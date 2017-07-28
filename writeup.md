@@ -16,16 +16,16 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./images/center.png "Center"
-[image2]: ./images/left.png "Left"
-[image3]: ./images/right.png "Right"
+[image1]: ./images/center.jpg "Center"
+[image2]: ./images/left.jpg "Left"
+[image3]: ./images/right.jpg "Right"
 [image4]: ./images/flipped.png "Flipped"
 [image5]: ./images/epoch5.png "Epoch 5"
 [image6]: ./images/epoch2.png "Epoch 2"
 
 
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ---
 ### Files Submitted & Code Quality
@@ -57,6 +57,7 @@ The model.py file contains the code for training and saving the convolution neur
 #### 1. An appropriate model architecture has been employed
 
 I used an modified version of Nvidia architecture. The model consists of the following architecture. (model.py line 68-84)
+
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
 | Input         		| 160x320x3 image   							|
@@ -132,6 +133,9 @@ I finally randomly shuffled the data set and put 20% of the data into a validati
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was 2 as evidenced by the graph below. I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
 Training with Epoch of 5:
+
 ![alt text][image5]
+
 Training with Epoch of 2:
+
 ![alt text][image6]
