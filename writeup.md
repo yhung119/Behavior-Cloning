@@ -139,3 +139,7 @@ Training with Epoch of 5:
 Training with Epoch of 2:
 
 ![alt text][image6]
+
+## Comments
+
+The model initially did not work well, then we noticed that cv2.imread reads the image in BGR and drive.py reads the image in RGB format. Therefore I needed to modified drive.py to transform the image to BGR. 
