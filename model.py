@@ -5,7 +5,9 @@ from sklearn.utils import shuffle
 
 # load the file source path
 lines = []
-with open("../../../../Desktop/data/driving_log.csv") as csvfile:
+# "../../../../../Desktop/data/driving_log.csv"
+#"../../CarND-Behavioral-Cloning-P3/data/driving_log.csv"
+with open("../../../../../Desktop/data/driving_log.csv") as csvfile:
 	reader = csv.reader(csvfile)
 	next(reader,None)
 	for line in reader:
@@ -32,10 +34,10 @@ def generator(samples, batch_size=16):
 				for i in range(3):
 					source_path = batch_sample[i]
 					filename = source_path.split('/')[-1]
-					current_path = "../../../../Desktop/data/IMG/" + filename
+					current_path = "../../../../../Desktop/data/IMG/" + filename
 					image = cv2.imread(current_path)
 					images.append(image)
-					measurement = float(line[3])
+					measurement = float(batch_sample[3])
 					# adding correction factor
 					if i == 1:
 						measurement += 0.2
@@ -61,6 +63,8 @@ from keras.layers import Flatten, Dense, Lambda, Cropping2D
 from keras.layers import Convolution2D, Dropout
 from keras.callbacks import ModelCheckpoint, Callback
 import matplotlib.pyplot as plt
+from keras.layers.advanced_activations import LeakyReLU
+from keras.layers.core import SpatialDropout2D
 
 train_generator = generator(train_samples, batch_size=16)
 validation_generator = generator(validation_samples, batch_size=16)
@@ -70,21 +74,30 @@ model = Sequential()
 # / 255.0 to make range 0 to 1
 # minus 0.5 to shift mean
 model.add(Lambda(lambda x : x/255.0 - 0.5, input_shape=(160,320,3)))
-model.add(Cropping2D(cropping=((70,25),(0,0))))
+model.add(Cropping2D(cropping=((75,25),(0,0))))
 model.add(Convolution2D(24, 5, 5, subsample=(2,2), activation="relu"))
+# model.add(LeakyReLU(alpha=.001))
+# model.add(SpatialDropout2D(0.2))
 model.add(Convolution2D(36, 5, 5, subsample=(2,2), activation="relu"))
+# model.add(LeakyReLU(alpha=.001))
+# model.add(SpatialDropout2D(0.2))
 model.add(Convolution2D(48, 5, 5, subsample=(2,2), activation="relu"))
+# model.add(LeakyReLU(alpha=.001))
+# model.add(SpatialDropout2D(0.2))
 model.add(Convolution2D(64, 3, 3, subsample=(2,2), activation="relu"))
+# model.add(LeakyReLU(alpha=.001))
+# model.add(SpatialDropout2D(0.2))
+
 # Add a flatten layer
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(50))#, activation="relu"))
-model.add(Dense(10))#, activation="relu"))
+model.add(Dense(10))#, activation="relu")
 model.add(Dense(1))#, activation="relu"))
 
 # Compile and train the model
 model.compile(optimizer="adam", loss='mse')
-history_object = model.fit_generator(train_generator, validation_data=validation_generator, nb_val_samples=len(validation_samples)*6, samples_per_epoch=len(train_samples)*6, nb_epoch=5, verbose=1)
+history_object = model.fit_generator(train_generator, validation_data=validation_generator, nb_val_samples=len(validation_samples)*6, samples_per_epoch=len(train_samples)*6, nb_epoch=2, verbose=1)
 
 #save model
 model.save('model.h5')
